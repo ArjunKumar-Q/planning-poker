@@ -36,7 +36,7 @@ export default function Sidebar(){
     }
 
     onSnapshot(collection(store,'users'),(doc)=>{
-        let users = []
+        let users:any[] = []
         if(doc.size !== 0){
             doc.forEach(item=>{
                 let {id} = item

@@ -102,14 +102,14 @@ function GamerBoard(){
 
      
     onSnapshot(doc(store,'choices','reveal_estimates'), async (docu) => {
-        let data;
-        if(docu.data().show){
+        let data:any;
+        if(docu.data()?.show){
             data = await getDoc(doc(store,'choices',"fs"))
         }
         setState(prev=>{
             return{
                 ...prev,
-                reveal:docu.data().show,
+                reveal:docu.data()?.show,
                 resultData: data !== undefined && data.data()
             }
         })
