@@ -13,7 +13,7 @@ function GamerBoard(){
     })
     let store  = getFirestore()
 
-    async function stateHandler(event:SyntheticEvent){
+    async function stateHandler(event:any){
         let data = await getDocs(collection(store,'choices'))
         let {id} = event.target;
         if(state.values.current === null){
