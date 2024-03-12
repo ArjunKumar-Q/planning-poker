@@ -1,9 +1,11 @@
 import { SyntheticEvent, useState } from "react"
 import Sidebar from "@/components/Sidebar";
-import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc,onSnapshot } from "firebase/firestore";
+import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc,onSnapshot, DocumentData } from "firebase/firestore";
+
+interface State{ values: { current: null, prev: null }, reveal: boolean, resultData: DocumentData|undefined; }
 
 function GamerBoard(){
-    let [state,setState] = useState({
+    let [state,setState] = useState<State>({
        values:{
         current:null,
         prev:null,
@@ -58,14 +60,14 @@ function GamerBoard(){
             let updateDocument = await updateDoc(docPath,{
                 show:true
               });
-            setState(prev=>{
+            setState((prev)=>{
             return{
                 values:{
                     current:null,
                     prev:null
                 },
                 reveal:!prev.reveal,
-                resultData:data.data()
+                resultData:data?.data()
             }
         })
     }
@@ -95,7 +97,7 @@ function GamerBoard(){
                 prev:null
             },
             reveal:false,
-            resultData:null,
+            resultData:undefined,
         }
     })  
     }
