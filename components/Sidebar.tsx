@@ -29,7 +29,7 @@ export default function Sidebar(){
               })
     }
 
-    async function logoutHandler(e:React.MouseEventHandler){
+    async function logoutHandler(e){
         await deleteDoc(doc(store,'users',e.target.id))
         localStorage.removeItem('userId')
         router.push('/')
