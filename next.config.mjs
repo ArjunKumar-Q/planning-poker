@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   output:"export",
-  "outDir": "./out",
+  outDir: "out",
 };
 
 export default nextConfig;
