@@ -31,7 +31,7 @@ export default function Home() {
   }
 
   useEffect(()=>{
-    let createCollection = async function(){
+    const createCollection = async function(){
       let data = await getDocs(collection(db,'choices'))
       if(!data.size){
         const docRef = doc(db, 'choices', 'fs');

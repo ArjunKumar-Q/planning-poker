@@ -126,7 +126,7 @@ function GamerBoard(){
                 [1,2,3,4,5,8,13,20,40,100,"?"].map((item,index)=>{
                     return(
                         <>
-                        <div key={index+29} className={` ${state.values.current == item ? 'bg-[#455a64] text-white':"bg-[#9f9e9d40]"} p-3 grid place-items-center h-[15vh] md:h-[25vh] xl:h-[30vh] rounded-md `} key={item} id={item} onClick={stateHandler}>
+                        <div key={index+29} className={` ${state.values.current == item ? 'bg-[#455a64] text-white':"bg-[#9f9e9d40]"} p-3 grid place-items-center h-[15vh] md:h-[25vh] xl:h-[30vh] rounded-md `} id={item} onClick={stateHandler}>
                             <span className="text-2xl">
                             {item}
                             </span>
