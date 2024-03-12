@@ -26,7 +26,7 @@ export default function Home() {
 
 
 
-  let changeHandler = (e)=>{   
+  let changeHandler = (e:any)=>{   
     setUserName(e.target.value)
   }
 
