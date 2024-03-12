@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { EventHandler, SyntheticEvent, useEffect, useState } from "react";
 import { getFirestore,getDocs,collection,doc,deleteDoc,updateDoc,onSnapshot,DocumentData} from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ export default function Sidebar(){
               })
     }
 
-    async function logoutHandler(e){
+    async function logoutHandler(e:React.MouseEvent<HTMLButtonElement>){
         await deleteDoc(doc(store,'users',e.target.id))
         localStorage.removeItem('userId')
         router.push('/')
