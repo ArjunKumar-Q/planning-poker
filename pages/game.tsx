@@ -2,7 +2,7 @@ import { SyntheticEvent, useState } from "react"
 import Sidebar from "@/components/Sidebar";
 import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc,onSnapshot, DocumentData } from "firebase/firestore";
 
-interface State{ values: { current: null, prev: null }, reveal: boolean, resultData: DocumentData|undefined; }
+interface State{ values: { current: null|number|string, prev: null|number|string }, reveal: boolean, resultData: DocumentData|undefined; }
 
 function GamerBoard(){
     let [state,setState] = useState<State>({
@@ -125,7 +125,7 @@ function GamerBoard(){
         (<div className="flex flex-col w-full items-center">
         <div key={'47398'} className="grid p-4 grid-cols-2 grid-row-6 md:grid-cols-4 md:grid-row-3   gap-2 xl:grid-rows-2 xl:grid-cols-6  w-full xl:h-3/4">
             {
-                [1,2,3,4,5,8,13,20,40,100,"?"].map((item,index)=>{
+                [1,2,3,4,5,8,13,20,40,100,"?"].map((item:string|number,index)=>{
                     return(
                         <>
                         <div key={index+29} className={` ${state.values.current == item ? 'bg-[#455a64] text-white':"bg-[#9f9e9d40]"} p-3 grid place-items-center h-[15vh] md:h-[25vh] xl:h-[30vh] rounded-md `} id={item} onClick={stateHandler}>
