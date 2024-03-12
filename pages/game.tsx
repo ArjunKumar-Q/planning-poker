@@ -2,13 +2,13 @@ import { SyntheticEvent, useState } from "react"
 import Sidebar from "@/components/Sidebar";
 import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc,onSnapshot, DocumentData } from "firebase/firestore";
 
-interface State{ values: { current: null|number|string, prev: null|number|string }, reveal: boolean, resultData: DocumentData|undefined; }
+interface State{ values: { current: string|undefined, prev: string|undefined }, reveal: boolean, resultData: DocumentData|undefined; }
 
 function GamerBoard(){
     let [state,setState] = useState<State>({
        values:{
-        current:null,
-        prev:null,
+        current:undefined,
+        prev:undefined,
        },
        reveal:false,
        resultData:undefined
