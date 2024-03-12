@@ -1,7 +1,6 @@
-import { SyntheticEvent, useState,useEffect } from "react"
+import { SyntheticEvent, useState } from "react"
 import Sidebar from "@/components/Sidebar";
-import Link from "next/link";
-import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc } from "firebase/firestore";
+import { getDoc, collection, getDocs, getFirestore,updateDoc,increment,doc,onSnapshot } from "firebase/firestore";
 
 function GamerBoard(){
     let [state,setState] = useState({
@@ -14,15 +13,6 @@ function GamerBoard(){
     })
     let store  = getFirestore()
 
-//     <tr className="h-[40px] m-2">
-//     <td className=" text-center border-r-4 ">
-//         1
-//     </td>
-//     <td className="text-center">
-//         4
-//     </td>
-// </tr>
-    
     async function stateHandler(event:SyntheticEvent){
         let data = await getDocs(collection(store,'choices'))
         let {id} = event.target;
@@ -70,7 +60,10 @@ function GamerBoard(){
               });
             setState(prev=>{
             return{
-                ...prev,
+                values:{
+                    current:null,
+                    prev:null
+                },
                 reveal:!prev.reveal,
                 resultData:data.data()
             }
@@ -107,24 +100,23 @@ function GamerBoard(){
     })  
     }
 
-    useEffect(()=>{
+     
+    onSnapshot(doc(store,'choices','reveal_estimates'), async (docu) => {
         let data;
-        async function fetcher(){
-        let status = await getDoc(doc(store,'choices','reveal_estimates'))
-        if(status.data().show){
+        if(docu.data().show){
             data = await getDoc(doc(store,'choices',"fs"))
         }
         setState(prev=>{
             return{
                 ...prev,
-                reveal:status.data().show,
+                reveal:docu.data().show,
                 resultData: data !== undefined && data.data()
             }
         })
-        }
-        fetcher()
+    });
 
-    })
+
+
 
     return(
     !state.reveal ?
@@ -176,7 +168,6 @@ function GamerBoard(){
                                 )
                                    
                             })
-                            // console.log(state.resultData)
                            }
                         </tbody>
                     </table>

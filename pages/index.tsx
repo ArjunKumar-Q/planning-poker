@@ -1,8 +1,7 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import { useState,useEffect } from "react";
+import { useState,useEffect, } from "react";
 import { useRouter } from "next/navigation";
-import { collection,addDoc,getFirestore, getDocs,doc,getDoc,updateDoc,increment,decrement,setDoc } from "firebase/firestore";
+import { collection,addDoc,getFirestore, getDocs,doc,setDoc } from "firebase/firestore";
 
 
 
@@ -10,23 +9,24 @@ import { collection,addDoc,getFirestore, getDocs,doc,getDoc,updateDoc,increment,
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 export default function Home() {
   let [userName,setUserName] = useState<string>('')
   let router = useRouter()
   let db = getFirestore()
-  
+
    async function adder(){
     const docRef = await addDoc(collection(db, "users"), {
       name: userName
     });
+    localStorage.setItem("userId",docRef.id)
     router.push("/game");
   }
 
 
 
 
-  let changeHandler = (e)=>{
-    
+  let changeHandler = (e)=>{   
     setUserName(e.target.value)
   }
 
@@ -48,10 +48,9 @@ export default function Home() {
             '40':0,
             '100':0,
           });
-          console.log(docRef.id)
       }
     }
-    createCollection()
+    createCollection()  
   },[])
   return (
     <main
@@ -73,10 +72,11 @@ export default function Home() {
       {/* onKeyDown={e=>e.key==='Enter'?router.push('/game'):null} */}
       <input type="text" placeholder="Please enter your name" className="border-2 pl-3 rounded-md h-[50px] w-4/5" defaultValue={userName} onChange={changeHandler} />
       <div className="my-8"></div>
-      <button type="button" className="bg-[#455a64] w-3/5 h-[50px] rounded-full hover:bg-[#2e3b41] text-white text-sm font-semibold" onClick={()=>adder()}>
-        CREATE ROOM
+      <button type="button" className="bg-[#455a64] w-3/5 h-[50px] rounded-full hover:bg-[#2e3b41] text-white text-sm font-semibold" onClick={()=> userName.length && adder()}>
+        CREATE/JOIN ROOM
       </button>
       </div>
     </main>
+  
   );
 }

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getFirestore,getDocs,collection,doc,deleteDoc,updateDoc} from "firebase/firestore";
-import { useRouter } from "next/router";
+import { getFirestore,getDocs,collection,doc,deleteDoc,updateDoc,onSnapshot,DocumentData} from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar(){
-    let [active_players,setPlayers] = useState([])
+    let [active_players,setPlayers] = useState<DocumentData[]>([])
+    let [state,setState] = useState<string|null>(null)
     let store  = getFirestore()
     let router = useRouter();
 
@@ -30,28 +31,38 @@ export default function Sidebar(){
 
     async function logoutHandler(e:React.MouseEventHandler){
         await deleteDoc(doc(store,'users',e.target.id))
-        setPlayers(prev=>{
-            let update = [...prev].filter(item=>item.id !== e.target.id)
-            if (update.length === 0) gameReset()
-            return update
-        })
+        localStorage.removeItem('userId')
+        router.push('/')
     }
 
+    onSnapshot(collection(store,'users'),(doc)=>{
+        let users = []
+        if(doc.size !== 0){
+            doc.forEach(item=>{
+                let {id} = item
+                users.push({id,...item.data()})
+            })
+        setPlayers(users)
+        } else{
+            router.push('/')
+        }
+    })
+
     useEffect(()=>{
-        let players = async function(){
-            let querySnapshot =  await getDocs(collection(store, "users"));
-            if(querySnapshot.size !== 0){
-                let users = []
-                querySnapshot.forEach((doc) => {
-                    let {id} = doc
-                    users.push({id,...doc.data()})
+        setState(window.localStorage.getItem('userId'))
+        async function fetcher(){
+            let players = await getDocs(collection(store,'users'))
+            if(players.size !== 0){
+                let data:DocumentData[] = [];
+                players.forEach(item => {
+                    data.push({id:item.id,name:item.data().name})
                 });
-                setPlayers(users)
+                setPlayers(data);
             }else{
                 router.push('/')
             }
         }
-        players();
+        fetcher()
     },[])
 
     return(
@@ -69,7 +80,7 @@ export default function Sidebar(){
                             return(
                                 <div className="h-[35px] mb-2 flex justify-between" key={index}>
                                     {item.name}
-                                    <button className="bg-[#455a64] w-auto m-1 rounded text-sm text-white p-1" id={item.id} onClick={logoutHandler}>
+                                    <button className={`bg-[#455a64] w-auto m-1 rounded text-sm text-white p-1 ${item.id != state ? "hidden":"visible"}`} id={item.id} onClick={logoutHandler}>
                                         Logout
                                     </button>
                                 </div>
