@@ -9,7 +9,7 @@ function GamerBoard(){
         prev:null,
        },
        reveal:false,
-       resultData:null
+       resultData:undefined
     })
     let store  = getFirestore()
 
